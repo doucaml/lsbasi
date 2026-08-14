@@ -72,6 +72,32 @@ class Interpreter(object):
         else:
             self.error()
 
+    def expr2(self):
+        self.current_token = self.get_next_token()
+
+        left = self.current_token
+        self.eat(INTEGER)
+
+        result = left.value
+
+        while self.current_token.type is not EOF:
+            op = self.current_token
+
+            if op.type == PLUS:
+                self.eat(PLUS)
+            elif op.type == MINUS:
+                self.eat(MINUS)
+
+            right = self.current_token
+            self.eat(INTEGER)
+
+            if op.type == PLUS:
+                result += right.value
+            else:
+                result -= right.value
+
+        return result
+
     def expr(self):
         self.current_token = self.get_next_token()
 
@@ -115,7 +141,7 @@ def main():
             continue
 
         interpreter = Interpreter(text)
-        result = interpreter.expr()
+        result = interpreter.expr2()
         print(result)
 
 

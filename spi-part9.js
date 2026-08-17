@@ -32,7 +32,7 @@ const [
 
 class AST {}
 
-class UnaryOp extends AST {
+class UnaryPlusOp extends AST {
   constructor(op, expr) {
     super();
     this.token = this.op = op;
@@ -40,7 +40,19 @@ class UnaryOp extends AST {
   }
 
   accept(visitor) {
-    return visitor.visitUnaryOp(this);
+    return visitor.visitUnaryPlusOp(this);
+  }
+}
+
+class UnaryMinusOp extends AST {
+  constructor(op, expr) {
+    super();
+    this.token = this.op = op;
+    this.expr = expr;
+  }
+
+  accept(visitor) {
+    return visitor.visitUnaryMinusOp(this);
   }
 }
 
@@ -300,12 +312,12 @@ class Parser {
     switch (token.type) {
       case PLUS:
         this.eat(PLUS);
-        node = new UnaryOp(token, this.factor());
+        node = new UnaryPlusOp(token, this.factor());
         break;
 
       case MINUS:
         this.eat(MINUS);
-        node = new UnaryOp(token, this.factor());
+        node = new UnaryMinusOp(token, this.factor());
         break;
 
       case INTEGER:
@@ -436,14 +448,12 @@ class NodeVisitor {
     }
   }
 
-  visitUnaryOp(node) {
-    switch (node.op.type) {
-      case PLUS:
-        return +node.expr.accept(this);
+  visitUnaryPlusOp(node) {
+    return +node.expr.accept(this);
+  }
 
-      case MINUS:
-        return -node.expr.accept(this);
-    }
+  visitUnaryMinusOp(node) {
+    return -node.expr.accept(this);
   }
 
   visitCompoundOp(node) {

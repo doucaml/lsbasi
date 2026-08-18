@@ -1,7 +1,6 @@
 import { Lexer } from "./lexer";
 import { Parser } from "./parser";
 import { Interpreter } from "./interpreter";
-import { readdir } from "node:fs/promises";
 
 const run = async () => {
   const text = await getFile();
@@ -9,7 +8,7 @@ const run = async () => {
   const parser = new Parser(lexer);
   const interpreter = new Interpreter(parser);
 
-  const result = interpreter.interpret();
+  interpreter.interpret();
   console.log(interpreter.GLOBAL_SCOPE);
 };
 

@@ -3,7 +3,6 @@ import {
   PLUS,
   MINUS,
   MULT,
-  DIV,
   LPAREN,
   RPAREN,
   DOT,
